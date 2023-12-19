@@ -1,4 +1,5 @@
-FROM ghcr.io/linuxsuren/api-testing:master
+# FROM ghcr.io/linuxsuren/api-testing:master
+FROM surenpi/api-testing:master
 
 WORKDIR /workspace
 COPY . .

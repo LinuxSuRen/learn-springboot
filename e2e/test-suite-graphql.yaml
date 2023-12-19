@@ -1,0 +1,61 @@
+#!api-testing
+# yaml-language-server: $schema=https://raw.githubusercontent.com/LinuxSuRen/api-testing/e65d0087ebe054fb3e3af5a3f7fd2e3a4382a345/docs/api-testing-schema.json
+name: SpringBoot
+spec:
+  kind: graphql
+api: |
+  {{default "http://localhost:8080" (env "SERVER")}}
+items:
+- name: queryBookById
+  request:
+    api: /graphql
+    body:
+      query: |
+        query xxx($id: ID) {
+          bookById(id: $id) {
+            id
+            name
+          }
+        }
+      variables:
+        id: book-1
+  expect:
+    bodyFieldsExpect:
+      data.bookById.name: Effective Java
+- name: allBooks
+  request:
+    api: /graphql
+    method: POST
+    header:
+      Content-Type: application/json
+    body: |
+      {
+        "query": "query xxx { books { name } }"
+      }
+  expect:
+    verify:
+      - len(data.data.books) >= 3
+- name: queryBookById-not-found
+  request:
+    api: /graphql
+    method: POST
+    header:
+      Content-Type: application/json
+    body: |
+      {
+        "query": "query xxx {\n  bookById(id: \"book\") {\n    id\n    name\n  }\n}",
+        "operationName": "xxx"
+      }
+  expect:
+    verify:
+      - data.bookById == nil
+- name: addBook
+  request:
+    api: /graphql
+    method: POST
+    header:
+      Content-Type: application/json
+    body: |
+      {
+        "query": "mutation size { addBook(name: \"name\"\n pageCount: 1)}"
+      }

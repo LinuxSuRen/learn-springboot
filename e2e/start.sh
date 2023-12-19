@@ -7,7 +7,7 @@ then
 fi
 
 docker-compose version
-docker-compose -f "$file" up --build -d --pull=never
+docker-compose -f "$file" up --build -d
 
 while true
 do

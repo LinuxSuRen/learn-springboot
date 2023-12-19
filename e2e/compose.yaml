@@ -15,6 +15,7 @@ services:
       - server
   server:
     image: ghcr.io/devops-ws/learn-springboot:master
+    pull_policy: never
     ports:
       - 8080:8080
     healthcheck:
